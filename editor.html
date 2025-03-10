@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script>
+      window.localserviceSettings = {};
+    </script>
+    <script src="/.localservice@runtime.c8c182a3.js"></script>
+    <script src="src/ui.js"></script>
+    <script src="/.localservice@runtime.c8c182a3.js"></script>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ihat</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <link href="style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <iframe src="about:blank" id="runner" style="display: none"></iframe>
+    <h1 id="title">ic.ihat editor</h1>
+    <div class="file-viewer" id="files">
+      <div class="file-setting">
+        files<i class="bx bx-file-blank" id="createFile"></i
+        ><i class="bx bx-folder" id="createFolder"></i>
+      </div>
+      <div id="file-view"></div>
+    </div>
+    <div class="editor-container">
+      <div class="line-numbers" id="lineNumbers"></div>
+      <textarea id="editor" spellcheck="false"></textarea>
+      <pre id="highlight"><code class="language-ihat"></code></pre>
+    </div>
+    <button onclick="window.runCode()" class="run">Test Code</button>
+    <button onclick="window.exit()" class="exit">Save & Quit project</button>
+    <div class="tab-view">
+      <div class="tabs">
+        <button class="tab-button" onclick="showTab('tab1')">
+          See console
+        </button>
+        <button class="tab-button" onclick="showTab('tab3')">
+          View Code Errors
+        </button>
+      </div>
+      <div class="results-container">
+        <div class="result-box tab-content" id="tab1">
+          <h3>Console:</h3>
+          <pre id="output"></pre>
+        </div>
+        <div class="result-box tab-content" id="tab3">
+          <h3>View Code Errors</h3>
+          <pre id="errors"></pre>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script type="module">
+      import { runCode, exit } from './src/editor.js';
+      window.runCode = runCode;
+      window.exit = exit;
+    </script>
+  </body>
+</html>

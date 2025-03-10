@@ -1,0 +1,306 @@
+body {
+  font-family: monospace;
+  display: grid;
+  grid-template-columns: 15% 45% 40%; /* File column + Code column */
+  grid-template-rows: 1fr auto; /* Code editor takes available space, Output fixed size */
+  gap: 5px;
+  padding-top: 50px;
+  background: #f5f5f5;
+  overflow: hidden;
+  height: 100vh;
+}
+.editor-container {
+  position: relative;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #ffffff;
+  height: 90%;
+}
+#editor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  caret-color: black;
+  min-width: calc(100% - 30px - var(--lineSize) * 4);
+  height: calc(100% - 30px);
+  padding: 15px;
+  text-wrap: nowrap;
+  font-family: 'Fira Code', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #fff0;
+  background: transparent;
+  border: none;
+  resize: none;
+}
+#editor:focus {
+  outline: none;
+}
+#highlight {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(100% - 30px - var(--lineSize) * 4);
+  height: calc(100% - 30px);
+  padding: 15px;
+  font-family: 'Fira Code', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  pointer-events: none;
+  background: transparent;
+  margin: 0;
+}
+
+#highlight,
+#editor {
+  margin-left: calc(48px + var(--lineSize));
+  padding-left: 0px;
+}
+
+.line-numbers {
+  border-right: #f5f5f5 2px solid;
+  padding: 15px;
+  overflow: scroll;
+  padding-top: 15px;
+  text-align: center;
+  height: 85vh;
+  user-select: none;
+  width: min-content;
+  color: #000;
+  display: flex;
+  line-height: 1.5;
+  font-family: 'Fira Code', monospace;
+  font-size: 14px;
+  pointer-events: none;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  align-content: center;
+}
+
+.line-numbers::-webkit-scrollbar {
+  display: none;
+}
+
+#highlight::-webkit-scrollbar {
+  display: none;
+}
+
+.results-container {
+  height: calc(100vh - 150px);
+}
+.result-box {
+  background: #fff;
+  padding: 15px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  overflow: scroll;
+  height: calc(100vh - 140px);
+}
+.result-box h3 {
+  margin-top: 0;
+  color: #333;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 8px;
+}
+.run {
+  padding: 10px 20px;
+  margin-bottom: 10px;
+  background: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  position: fixed;
+  top: 0.2rem;
+  right: 50%;
+  transform: translate(50%, 0px);
+}
+
+.exit {
+  padding: 10px 20px;
+  margin-bottom: 10px;
+  background: #c11616;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  position: fixed;
+  top: 0.2rem;
+  right: 0.5rem;
+}
+.exit:hover {
+  background: #9e1111;
+}
+
+.run:hover {
+  background: #45a049;
+}
+pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+h1 {
+  position: fixed;
+  top: 0.12em;
+  width: auto;
+  padding: 0px;
+  margin: 0px;
+}
+
+.tabs {
+  margin-bottom: 10px;
+}
+
+.tab-button {
+  padding: 10px 20px;
+  cursor: pointer;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 5px;
+}
+
+.tab-button:hover {
+  background-color: #e0e0e0;
+}
+
+.tab-content {
+  display: none;
+}
+
+.active {
+  display: block;
+}
+
+.tab-view {
+  width: 95%;
+  height: 90%;
+}
+
+.file {
+  padding: 3px;
+  user-select: none;
+  grid-template-columns: 1fr 15px;
+  display: grid;
+}
+
+.file:hover,
+.file.interactive {
+  background: #dedede;
+}
+
+.file .bx-trash {
+  display: none;
+}
+
+.file:hover .bx-trash {
+  display: block;
+}
+
+.file-setting {
+  display: grid;
+  grid-template-columns: 1fr 15px 15px;
+}
+
+#file-view {
+  display: flex;
+  flex-direction: column;
+}
+
+.file-input {
+  width: 100%;
+  outline: none;
+  background: none;
+  border: none;
+  padding-block: 0px;
+  padding-inline: 0px;
+  color: black;
+}
+
+.file.interactive:not(:has(input)) {
+  display: none;
+}
+
+.folder a {
+  display: grid;
+  grid-template-columns: 15px 1fr 15px 15px 15px;
+  cursor: default;
+}
+
+.folder .folderFile a {
+  display: none;
+}
+
+.folder:has(a.open):not(:has(.folder)) .folderFile a {
+  display: grid;
+  grid-template-columns: 1fr 15px;
+}
+
+.folderFile {
+  margin-left: 12%;
+}
+
+.folder a.pen {
+  display: grid;
+  grid-template-columns: 15px 1fr 15px 15px 15px !important;
+}
+
+::-moz-selection {
+  color: rgb(0 126 201);
+  background: rgb(11 97 149);
+  border-radius: 10px;
+}
+
+::selection {
+  color: rgb(0 126 201);
+  background: rgb(0 126 202);
+  border-radius: 10px;
+}
+
+.folder:has(> a.pen.open) > div.folderFile > a.file {
+  display: grid;
+  grid-template-columns: 1fr 15px;
+}
+
+.folder:not(:has(> a.pen.open)) > div.folderFile {
+  display: none;
+}
+
+.object {
+  margin: 0px;
+  padding: 0px;
+}
+
+.object:before {
+  content: '{';
+}
+.object:after {
+  content: '}';
+}
+
+.object li {
+  padding-left: 10px;
+  display: block;
+}
+
+.array {
+  margin: 0px;
+  padding: 0px;
+}
+
+.array:before {
+  content: '[';
+}
+.array:after {
+  content: ']';
+}
+
+.array li {
+  padding-left: 10px;
+  display: block;
+}

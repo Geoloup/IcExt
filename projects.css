@@ -1,0 +1,162 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+}
+
+body {
+  background-color: white;
+  color: black;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+h1 {
+  margin-bottom: 1rem;
+}
+
+.projects-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+  width: 100%;
+  max-width: 900px;
+}
+
+.project-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: #7b7b7b 0px 0px 5px 1px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.project-card h2 {
+  margin-bottom: 0.5rem;
+}
+
+.project-date {
+  font-size: 0.85rem;
+  color: gray;
+}
+
+.project-actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+  /* visibility: hidden; */
+}
+
+.project-card button:hover {
+  background-color: #f0f0f0;
+}
+
+.project-actions button {
+  background: white;
+  box-shadow: #6d6d6d 0px 0px 5px 0px;
+  padding: 1rem;
+  color: black;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  line-height: 0;
+}
+
+.new-project {
+  background: black;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.5rem 1rem;
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  transition-property: color, background-color, border-color,
+    text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 0.15s;
+}
+
+.doc {
+  background: black;
+  position: absolute;
+  top: 1rem;
+  right: 10rem;
+  padding: 0.5rem 1rem;
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  transition-property: color, background-color, border-color,
+    text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 0.15s;
+}
+
+.doc a {
+  text-decoration: none;
+  color: white;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  visibility: hidden;
+}
+
+.modal.show {
+  visibility: visible;
+}
+
+.modal-content {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  text-align: center;
+  border: 2px solid black;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 1rem;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 1rem;
+  border: 2px solid black;
+}
+
+.project-actions button::after {
+  content: attr(data-action);
+  display: block;
+  font-size: 12px;
+}
+.modal-actions button {
+  padding: 7px;
+  background: black;
+  color: white;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+}

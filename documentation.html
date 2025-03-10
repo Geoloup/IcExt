@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/png" href="icon.png" />
+    <link href="documentation.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ichat extentsion documentation</title>
+    <script>
+      function showCard(index) {
+        const cards = document.querySelectorAll('.card');
+        cards.forEach((card, i) => {
+          card.style.display = i === index ? 'block' : 'none';
+        });
+      }
+
+      function toggleCategory(buttonsId) {
+        const category = document.getElementById(
+          buttonsId.replace('-buttons', '')
+        );
+        console.log(buttonsId.replace('-buttons', ''));
+        const buttonsDiv = document.getElementById(buttonsId);
+        category.classList.toggle('bx-chevron-right');
+        category.classList.toggle('bx-chevron-down');
+
+        buttonsDiv.style.display =
+          buttonsDiv.style.display === 'none' ? 'block' : 'none';
+      }
+    </script>
+  </head>
+  <body>
+    <div class="sidebar">
+      <h3>Ichat documentation</h3>
+
+      <div class="category">
+        <div
+          class="category-title"
+          onclick="toggleCategory('builtins-buttons')"
+        >
+          <i id="builtins" class="bx bx-chevron-right"></i>builtins
+        </div>
+        <div
+          class="category-buttons"
+          style="display: none"
+          id="builtins-buttons"
+        >
+          <button onclick="showCard(0)">Files</button>
+          <button onclick="showCard(1)">Logging</button>
+          <button onclick="showCard(2)">Time</button>
+          <button onclick="showCard(3)">Thread</button>
+          <button onclick="showCard(4)">Import</button>
+        </div>
+      </div>
+      <div class="category">
+        <div
+          class="category-title"
+          onclick="toggleCategory('extentsion-buttons')"
+        >
+          <i id="extentsion" class="bx bx-chevron-right"></i>Extentsion Api
+        </div>
+        <div
+          class="category-buttons"
+          style="display: none"
+          id="extentsion-buttons"
+        >
+          <button onclick="showCard(5)">extentionAPI</button>
+          <button onclick="showCard(6)">Message Object</button>
+        </div>
+      </div>
+      <div class="category">
+        <div
+          class="category-title"
+          onclick="toggleCategory('example-buttons')"
+        >
+          <i id="example" class="bx bx-chevron-right"></i>Example
+        </div>
+        <div
+          class="category-buttons"
+          style="display: none"
+          id="example-buttons"
+        >
+          <button onclick="showCard(7)">Open File</button>
+          <button onclick="showCard(8)">Extension</button>
+        </div>
+      </div>
+      <div class="category">
+        <div
+          class="category-title"
+          onclick="toggleCategory('setup-buttons')"
+        >
+          <i id="setup" class="bx bx-chevron-right"></i>Setup
+        </div>
+        <div
+          class="category-buttons"
+          style="display: none"
+          id="setup-buttons"
+        >
+          <button onclick="showCard(9)">Get API key</button>
+          <button onclick="showCard(10)">Get logs</button>
+        </div>
+      </div>
+    </div>
+      </div>
+
+    <div class="content">
+      <div class="card">
+        <h2 class="card-title">Files</h2>
+        <p class="card-content">
+          Opening a files : <pre>open()</pre>
+          <br />
+          Opening Editor files : <pre>openLocal()</pre>
+        </p>
+      </div>
+      <div class="card">
+        <h2 class="card-title">Logging</h2>
+        <p class="card-content">
+          Normal logs : <pre>print()</pre> 
+          <br />
+          Errors logs : <pre>error()</pre>
+        </p>
+      </div>
+      <div class="card">
+        <h2 class="card-title">Time</h2>
+        <p class="card-content">
+          Sleep : <pre>sleep(time)</pre>
+        </p>
+      </div>
+      <div class="card">
+        <h2 class="card-title">Thread</h2>
+        <p class="card-content">
+          Async function : <pre>thread func</pre>
+          <br />
+          Await for a async function : <pre>wait</pre>
+        </p>
+      </div>
+      <div class="card">
+        <h2 class="card-title">Importing other .ihat files</h2>
+        <p class="card-content">
+          import syntax is :<pre>import fileNameWithoutExtention</pre>
+          To imort file under directory use :<pre>import dirname/fileNameWithoutExtention</pre>
+          You can nested dirname juste add them like <pre>import dirname/nesteds dirname/fileNameWithoutExtention</pre>
+        </p>
+      </div>
+      <div class="card">
+        <h2 class="card-title">extentionAPI</h2>
+        <p class="card-content">
+          extentionAPI : call ichat api parms : <pre>('apikey','bot name')</pre>
+          extentionAPI.command : register command parms :
+        <pre>('commandName','callback on message')</pre>
+          extentionAPI.command callback : returned : <pre>message Object (more info in the message Object)</pre> 
+          extentionAPI.onMessage : called when user get a message return a <pre>message Object (more info in the message Object)</pre>
+          extentionAPI.embed : send embed parms that support line break and some markdown parms : <pre>('message')</pre>
+          extentionAPI.send : send message like a user parms : <pre>('message')</pre>
+        </p>
+      </div>
+      <div class="card">
+        <h2 class="card-title">Message Object</h2>
+        <p class="card-content">
+          Message Object view 
+          <pre>{
+  message : String
+}</pre>
+        </p>
+      </div>
+      <div class="card">
+        <h2 class="card-title">Simple file opening</h2>
+        <p class="card-content">
+          <pre>
+var file = open('example.txt')
+file.write('HI')
+print(file.read())</pre>
+        </p>
+      </div>
+      <div class="card">
+        <h2 class="card-title">Basic extension</h2>
+        <p class="card-content">
+          <pre>var ichat = extentionAPI('DevApiKey','BotName/ExtensionName')
+func welcome() {
+  print('Welcome')
+  ichat.send('Welcome to IC-hat')
+}
+ichat.command('welcome',welcome) // register command by passing command name and callback function</pre>
+        </p>
+      </div>
+      <div class="card">
+        <h2 class="card-title">Get api key</h2>
+        <p class="card-content">
+          To obtain an API key, visit <a href='https://ic-hat.geoloup.com/devkit' target='_blank'>this page</a>. Here, you can set the key you want to use for your account.
+          <br>
+          Please note that unpublished extensions require an API key and will only function when the code is running in a tab where IC-Hat is open with your API key. Additionally, the key is restricted to one device at a time.
+        </p>
+      </div>
+      <div class="card">
+        <h2 class="card-title">Get Logs</h2>
+        <p class="card-content">
+          <pre>advenced logs are not available</pre>
+        </p>
+      </div>
+
+    </div>
+  </body>
+</html>
