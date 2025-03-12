@@ -62,7 +62,7 @@ document.getElementById('createFolder').onclick = function () {
 fsView.list();
 window.activeFile = 'main.ihat';
 if (fs.exists('main.ihat') == false) {
-  fs.create('main.ihat','// Welcome the doc is still in progress of making sorry\n')
+  fs.create('main.ihat','')
 }
 
 if (ProjectLocation == 'example') {
