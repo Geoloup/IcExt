@@ -36,7 +36,7 @@ async function IC(apiKey, name) {
 }
 
 class _IC {
-  constructor(direct, name, room, email) {
+  constructor(direct, name, room, email, peer) {
     // check
     // define info
     this.info = { name: name, room: room, email: email };
@@ -51,7 +51,16 @@ class _IC {
         callback(val);
       });
     }
-    this.db.init(RunonMessage);
+    window.conn.on('data', (data) => {
+      if (data.startsWith('m')) {
+        var value = {
+          val: () => {
+            return { message: data.replace('m', '') };
+          },
+        };
+        RunonMessage(value);
+      }
+    });
     if (direct) {
       // if okeay then
     } else {
@@ -117,53 +126,12 @@ class IC_API {
 
 // ichat builtins : db
 class IC_DB {
-  constructor(info) {
-    /*
-    console.log('refreshing iframe');
-    const iframe = document.querySelector(
-      'iframe[src="https://ic-hat.geoloup.com/d/session/"]'
-    );
-    iframe.src = '';
-    iframe.src = 'https://ic-hat.geoloup.com/d/session/';
-    */
+  constructor(info, conn) {
     this.info = info;
-    console.log('Connecting to ichat DB');
-    this.firebaseConfig = {
-      apiKey: 'AIzaSyD9po7l-vwO0VrY1rMYDFTYNlEBv54T6do',
-      authDomain: 'ic-hat.firebaseapp.com',
-      databaseURL: 'https://ic-hat-default-rtdb.firebaseio.com',
-      projectId: 'ic-hat',
-      storageBucket: 'ic-hat.appspot.com',
-      messagingSenderId: '720687529085',
-      appId: '1:720687529085:web:2d964e880c5e2398058514',
-      measurementId: 'G-YC8K0D7GLR',
-    };
-
-    // Initialize Firebase
-    try {
-      this.app = firebase.initializeApp(this.firebaseConfig);
-      this.database = firebase.database(this.app);
-      window.app = this.app;
-      window.database = this.database;
-    } catch {
-      this.app = window.app;
-      this.database = window.database;
-    }
-
-    // Expose app and database for global use if needed
-
+    this.conn = conn;
     window.prevent = false;
   }
 
-  connection() {
-    return this.database;
-  }
-
-  /**
-   * Sends a message to Firebase.
-   * @param {string} message - The message to send.
-   * @param {string} [type="message"] - The type of message.
-   */
   sendMessage(message, type = 'message', r = '') {
     var id = this.getRoom();
     window.last = [message, id];
@@ -185,40 +153,19 @@ class IC_DB {
         var renderedMessage = this.message_render(sanitizedMessage, 'nop');
         var cusid = id;
 
-        var mes = this.database.ref(
-          'messages/' + cusid + '/' + crypto.randomUUID()
-        );
-        var preload = this.database.ref('preload/' + cusid + '/Message');
-        preload.set({
-          email: myEmail,
-          allow: 'none',
-          type: 'message',
-          message: renderedMessage,
-          name: myName,
-          date: Date.now(),
-          dname: cusid,
-          s: r,
-        });
-
-        mes.set({
-          email: myEmail,
+        conn.send(`m\|${cusid}\|${message}`);
+        /*          email: myEmail,
           allow: 'none',
           type: type,
           message: renderedMessage,
           name: myName,
           date: Date.now(),
-          dname: cusid,
-        });
+          dname: cusid,*/
         console.log(`Message sent : ${message}`);
       }
     }
   }
 
-  /**
-   * Sends a embed to ichat.
-   * @param {string} message - The message to send.
-   * @param {string} [type="message"] - The type of message.
-   */
   sendEmbed(message, type = 'embed', r = '') {
     var id = this.getRoom();
     window.last = [message, id];
@@ -239,42 +186,12 @@ class IC_DB {
           .replaceAll('>', '&gt;');
         var renderedMessage = this.message_render(sanitizedMessage, 'nop');
         var cusid = id;
-
-        var preload = this.database.ref('preload/' + cusid + '/Message');
-        var mes = this.database.ref(
-          'messages/' + cusid + '/' + crypto.randomUUID()
-        );
-        preload.set({
-          email: myEmail,
-          allow: 'none',
-          type: 'message',
-          mtype: 'embed',
-          message: renderedMessage,
-          name: myName,
-          date: Date.now(),
-          dname: cusid,
-          s: r,
-        });
-
-        mes.set({
-          email: myEmail,
-          allow: 'none',
-          type: 'embed',
-          mtype: 'embed',
-          message: renderedMessage,
-          name: myName,
-          date: Date.now(),
-          dname: cusid,
-        });
+        conn.send(`b\|${cusid}\|${message}`);
         console.log(`Message sent : ${message}`);
       }
     }
   }
 
-  /**
-   * Adds a handler to be triggered when a message is sent.
-   * @param {function} callback - The handler function to add.
-   */
   addMessageHandler(callback) {
     if (window.onsendmessage === undefined) {
       window.onsendmessage = [];
@@ -283,9 +200,6 @@ class IC_DB {
     return true;
   }
 
-  /**
-   * Resets the message state by clearing the last message and disabling handlers.
-   */
   resetMessageState() {
     window.last = undefined;
     window.prevent = false;
@@ -329,52 +243,7 @@ class IC_DB {
     }
   }
   init(callback) {
-    const friend_invite = this.database.ref('users_friend/');
-    friend_invite.on('child_added', (data) => {
-      const dnamef = data.val().dname;
-
-      // Listen for child additions in the `preload/<dnamef>` node.
-      this.database
-        .ref(`preload/${dnamef}`)
-        .on('child_added', async (data2) => {
-          if (
-            data2.val().name != null &&
-            data2.val().type === 'message' &&
-            data2.val().message != null &&
-            data2.val().message != undefined &&
-            Math.abs(new Date() - data2.val().date) <= 10000 &&
-            data2.val().s != 'secret'
-          ) {
-            setTimeout(
-              (data2) => {
-                callback(data2);
-              },
-              1000,
-              data2
-            );
-          }
-        });
-      this.database
-        .ref(`preload/${dnamef}`)
-        .on('child_changed', async (data2) => {
-          if (
-            data2.val().name != null &&
-            data2.val().type === 'message' &&
-            data2.val().message != null &&
-            data2.val().message != undefined &&
-            Math.abs(new Date() - data2.val().date) <= 10000 &&
-            data2.val().s != 'secret'
-          ) {
-            setTimeout(
-              (data2) => {
-                callback(data2);
-              },
-              1000,
-              data2
-            );
-          }
-        });
-    });
+    callback(data2);
   }
 }
 
@@ -423,6 +292,7 @@ class ic_directAPI {
     this.conn.on('open', () => {
       console.log('Connected to peer: ', targetId);
       this.conn.on('data', (data) => {
+        window.conn = this.conn;
         this.displayMessage('Received: ' + data);
         localStorage.setItem('lastPeer', data);
         window.support.forEach((sfunction) => {
@@ -441,6 +311,7 @@ class ic_directAPI {
       this.conn = incomingConn;
       console.log('Connected to another tab!');
       this.conn.on('data', (data) => {
+        window.conn = this.conn;
         this.displayMessage('Received: ' + data);
         localStorage.setItem('lastPeer', data);
         window.support.forEach((sfunction) => {
