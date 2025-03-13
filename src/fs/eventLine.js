@@ -51,18 +51,19 @@ class _IC {
         callback(val);
       });
     }
-    window.conn.on('data', (data) => {
-      if (data.startsWith('m')) {
-        var value = {
-          val: () => {
-            return { message: data.replace('m', '') };
-          },
-        };
-        RunonMessage(value);
-      }
-    });
     if (direct) {
       // if okeay then
+      window.conn.on('data', (data) => {
+        if (data.startsWith('m')) {
+          console.log(data);
+          var value = {
+            val: () => {
+              return { message: data.replace('m', '') };
+            },
+          };
+          RunonMessage(value);
+        }
+      });
     } else {
       throw new Error('[IC] Connecting failed');
     }
@@ -291,8 +292,8 @@ class ic_directAPI {
 
     this.conn.on('open', () => {
       console.log('Connected to peer: ', targetId);
+      window.conn = this.conn;
       this.conn.on('data', (data) => {
-        window.conn = this.conn;
         this.displayMessage('Received: ' + data);
         localStorage.setItem('lastPeer', data);
         window.support.forEach((sfunction) => {
@@ -309,9 +310,9 @@ class ic_directAPI {
   setupIncomingConnections() {
     this.peer.on('connection', (incomingConn) => {
       this.conn = incomingConn;
+      window.conn = this.conn;
       console.log('Connected to another tab!');
       this.conn.on('data', (data) => {
-        window.conn = this.conn;
         this.displayMessage('Received: ' + data);
         localStorage.setItem('lastPeer', data);
         window.support.forEach((sfunction) => {
