@@ -17,7 +17,6 @@ export class ExtensionCompiler {
     var headerCode = 'async function main() {\n'; // use var to add data to the compile code like builtins custom function internal. (Example : open)
     var footerCode = '};\nmain()';
     let compiledCode =
-      '/*please add to the html for external website. :     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>*/' +
       headerCode +
       builtinsFS +
       '\n' +
